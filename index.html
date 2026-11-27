@@ -1,0 +1,2743 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>数理化经背景 · 香港本科专业方向探索问卷</title>
+  <style>
+    /* ==========================================================================
+       设计系统变量（牛津深蓝 + 暖金点缀 + 柔和米白学术画布）
+       零外部 CDN 依赖，适配微信内置浏览器与主流移动端浏览器
+       ========================================================================== */
+    :root {
+      --navy: #1B365D;
+      --navy-dark: #122645;
+      --navy-soft: #EDF2F8;
+      --gold: #C59B27;
+      --gold-dark: #9E7A17;
+      --gold-soft: #FDF8E8;
+      --canvas: #F6F8FB;
+      --card: #FFFFFF;
+      --ink: #1A202C;
+      --slate: #4A5568;
+      --muted: #718096;
+      --border: #E2E8F0;
+      --border-strong: #CBD5E0;
+      --teal: #236B7A;
+      --teal-soft: #EBF6F8;
+      --danger: #C53030;
+      --danger-soft: #FFF5F5;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      --shadow-sm: 0 2px 8px rgba(27, 54, 93, 0.05);
+      --shadow-md: 0 8px 24px rgba(27, 54, 93, 0.08);
+      --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+      background-color: var(--canvas);
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-sans);
+      color: var(--ink);
+      background-color: var(--canvas);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* 移动端优先居中容器：桌面端 520px 居中，手机端舒适贴边 */
+    .app-shell {
+      max-width: 520px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background-color: var(--canvas);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media (min-width: 560px) {
+      body {
+        background: linear-gradient(180deg, #EBF0F6 0%, #F6F8FB 100%);
+        padding: 20px 12px 40px;
+      }
+      .app-shell {
+        min-height: calc(100vh - 60px);
+        border-radius: 22px;
+        box-shadow: 0 14px 40px rgba(27, 54, 93, 0.12);
+        overflow: clip;
+        border: 1px solid rgba(27, 54, 93, 0.08);
+      }
+    }
+
+    /* ==========================================================================
+       顶部粘性进度条（作答阶段显示）
+       ========================================================================== */
+    .sticky-header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px 10px;
+      display: none;
+    }
+
+    .sticky-header.is-visible {
+      display: block;
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      margin-bottom: 8px;
+      gap: 8px;
+    }
+
+    .progress-module {
+      font-weight: 700;
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .progress-step-pill {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--gold-dark);
+      background: var(--gold-soft);
+      border: 1px solid rgba(197, 155, 39, 0.35);
+      padding: 2px 7px;
+      border-radius: 999px;
+    }
+
+    .progress-pct {
+      font-weight: 700;
+      color: var(--slate);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      background: var(--navy-soft);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--navy) 0%, var(--gold) 100%);
+      border-radius: 999px;
+      transition: width 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* ==========================================================================
+       主体内容区与卡片
+       ========================================================================== */
+    .main-stage {
+      flex: 1;
+      padding: 16px 16px 96px;
+    }
+
+    .main-stage.is-cover {
+      padding-bottom: 32px;
+    }
+
+    .main-stage.is-report {
+      padding-bottom: 40px;
+    }
+
+    .fade-enter {
+      animation: fadeSlideUp 0.28s ease-out both;
+    }
+
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    /* ==========================================================================
+       Screen 0：封面页样式
+       ========================================================================== */
+    .hero-card {
+      background: linear-gradient(145deg, var(--navy) 0%, #244775 100%);
+      color: #FFFFFF;
+      border: none;
+      padding: 24px 20px 22px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      right: -36px;
+      top: -36px;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(197, 155, 39, 0.28) 0%, rgba(197, 155, 39, 0) 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: #F6E09F;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(246, 224, 159, 0.32);
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+
+    .hero-title {
+      font-size: 1.42rem;
+      line-height: 1.35;
+      font-weight: 800;
+      margin: 0 0 10px;
+      letter-spacing: 0.01em;
+    }
+
+    .hero-desc {
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: rgba(255, 255, 255, 0.9);
+      margin: 0;
+    }
+
+    .instruction-box {
+      border-left: 4px solid var(--gold);
+      background: var(--gold-soft);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 13px 14px;
+      margin-bottom: 14px;
+      font-size: 0.88rem;
+      color: #3A3320;
+    }
+
+    .instruction-box strong {
+      color: var(--navy);
+    }
+
+    .form-section-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin: 0 0 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .form-section-sub {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .input-group {
+      margin-bottom: 14px;
+    }
+
+    .input-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .input-label {
+      display: block;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--slate);
+      margin-bottom: 6px;
+    }
+
+    .text-input {
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 12px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--ink);
+      background: var(--canvas);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      outline: none;
+      transition: border-color 0.2s, background-color 0.2s;
+    }
+
+    .text-input:focus {
+      border-color: var(--navy);
+      background: #FFFFFF;
+    }
+
+    .grade-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .grade-btn {
+      min-height: 44px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border);
+      background: var(--canvas);
+      color: var(--slate);
+      font-size: 0.9rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .grade-btn.is-selected {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: #FFFFFF;
+      box-shadow: 0 3px 10px rgba(27, 54, 93, 0.2);
+    }
+
+    /* 手风琴：参考的科学量化测评体系 */
+    .accordion-card {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .accordion-trigger {
+      width: 100%;
+      min-height: 50px;
+      padding: 14px 16px;
+      background: transparent;
+      border: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--navy);
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .accordion-arrow {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      color: var(--gold-dark);
+      transition: transform 0.25s ease;
+    }
+
+    .accordion-card.is-open .accordion-arrow {
+      transform: rotate(180deg);
+    }
+
+    .accordion-body {
+      display: none;
+      padding: 0 16px 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .accordion-card.is-open .accordion-body {
+      display: block;
+    }
+
+    .framework-item {
+      padding: 10px 0;
+      border-bottom: 1px dashed var(--border);
+      font-size: 0.84rem;
+    }
+
+    .framework-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .framework-name {
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 2px;
+    }
+
+    .framework-meta {
+      color: var(--slate);
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    /* ==========================================================================
+       按钮系统
+       ========================================================================== */
+    .btn-primary {
+      width: 100%;
+      min-height: 50px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, var(--navy) 0%, #264A7E 100%);
+      color: #FFFFFF;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: inherit;
+      letter-spacing: 0.03em;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(27, 54, 93, 0.22);
+      transition: transform 0.12s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary:active {
+      transform: scale(0.985);
+    }
+
+    .btn-primary:disabled {
+      background: #CBD5E0;
+      color: #718096;
+      box-shadow: none;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold) 0%, #B3891C 100%);
+      box-shadow: 0 6px 16px rgba(197, 155, 39, 0.28);
+    }
+
+    .btn-secondary {
+      min-height: 48px;
+      padding: 10px 16px;
+      border: 1.5px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      background: #FFFFFF;
+      color: var(--navy);
+      font-size: 0.92rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background-color 0.15s, border-color 0.15s;
+    }
+
+    .btn-secondary:active {
+      background: var(--navy-soft);
+    }
+
+    /* ==========================================================================
+       步骤页头部说明
+       ========================================================================== */
+    .step-intro {
+      margin-bottom: 14px;
+    }
+
+    .step-kicker {
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--gold-dark);
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .step-heading {
+      font-size: 1.18rem;
+      font-weight: 800;
+      color: var(--navy);
+      margin: 0 0 4px;
+    }
+
+    .step-sub {
+      font-size: 0.85rem;
+      color: var(--slate);
+      margin: 0;
+    }
+
+    .scale-guide-bar {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 4px 8px;
+      background: var(--navy-soft);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      font-size: 0.76rem;
+      color: var(--navy);
+      margin-bottom: 14px;
+    }
+
+    /* ==========================================================================
+       模块一：Likert 1-5 题卡
+       ========================================================================== */
+    .q-card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      border: 1.5px solid var(--border);
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .q-card.is-answered {
+      border-color: rgba(27, 54, 93, 0.24);
+    }
+
+    .q-card.is-missing {
+      border-color: var(--danger);
+      background: var(--danger-soft);
+      animation: gentleShake 0.36s ease;
+    }
+
+    @keyframes gentleShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    .q-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .q-num {
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      background: var(--navy-soft);
+      color: var(--navy);
+      font-size: 0.78rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+
+    .q-card.is-answered .q-num {
+      background: var(--navy);
+      color: #FFFFFF;
+    }
+
+    .q-text {
+      font-size: 0.94rem;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    .likert-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+
+    .likert-btn {
+      min-height: 48px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border-strong);
+      background: var(--canvas);
+      color: var(--navy);
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.16s ease;
+      padding: 4px 0;
+    }
+
+    .likert-btn:active {
+      transform: scale(0.95);
+    }
+
+    .likert-btn.is-selected {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(27, 54, 93, 0.25);
+    }
+
+    .likert-btn.is-selected .likert-tiny {
+      color: #F6E09F;
+    }
+
+    .likert-tiny {
+      font-size: 0.64rem;
+      font-weight: 500;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    .likert-ends {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.74rem;
+      color: var(--muted);
+      margin-top: 7px;
+      padding: 0 2px;
+    }
+
+    /* ==========================================================================
+       模块二：二选一强制单选卡片
+       ========================================================================== */
+    .group-banner {
+      background: var(--navy-soft);
+      border-left: 4px solid var(--navy);
+      color: var(--navy);
+      font-size: 0.86rem;
+      font-weight: 700;
+      padding: 9px 12px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin: 18px 0 12px;
+    }
+
+    .group-banner:first-of-type {
+      margin-top: 4px;
+    }
+
+    .ab-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .ab-btn {
+      width: 100%;
+      min-height: 52px;
+      padding: 12px 13px;
+      border-radius: var(--radius-md);
+      border: 1.5px solid var(--border-strong);
+      background: var(--canvas);
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 0.88rem;
+      line-height: 1.5;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      transition: all 0.16s ease;
+    }
+
+    .ab-btn:active {
+      transform: scale(0.99);
+    }
+
+    .ab-badge {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1.5px solid var(--navy);
+      color: var(--navy);
+      font-size: 0.78rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+      background: #FFFFFF;
+    }
+
+    .ab-btn.is-selected {
+      background: var(--navy-soft);
+      border-color: var(--navy);
+      box-shadow: 0 3px 10px rgba(27, 54, 93, 0.12);
+    }
+
+    .ab-btn.is-selected .ab-badge {
+      background: var(--navy);
+      color: #FFFFFF;
+    }
+
+    .ab-btn.is-selected .ab-copy {
+      color: var(--navy-dark);
+      font-weight: 600;
+    }
+
+    /* ==========================================================================
+       模块三：价值观 8 选 3 排序卡片
+       ========================================================================== */
+    .rank-summary-bar {
+      background: #FFFFFF;
+      border: 1.5px solid var(--navy);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .rank-summary-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .rank-slots {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .rank-slot {
+      min-height: 40px;
+      border-radius: var(--radius-sm);
+      border: 1px dashed var(--border-strong);
+      background: var(--canvas);
+      padding: 6px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 0.76rem;
+      color: var(--muted);
+    }
+
+    .rank-slot.is-filled {
+      border-style: solid;
+      border-color: var(--gold);
+      background: var(--gold-soft);
+      color: var(--navy);
+      font-weight: 700;
+    }
+
+    .rank-slot-num {
+      font-size: 0.68rem;
+      color: var(--gold-dark);
+      font-weight: 700;
+    }
+
+    .value-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .value-card {
+      width: 100%;
+      min-height: 62px;
+      padding: 13px 14px;
+      border-radius: var(--radius-md);
+      border: 1.5px solid var(--border);
+      background: #FFFFFF;
+      text-align: left;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.16s ease;
+    }
+
+    .value-card:active {
+      transform: scale(0.99);
+    }
+
+    .value-card.is-selected {
+      border-color: var(--gold);
+      background: var(--gold-soft);
+      box-shadow: 0 4px 12px rgba(197, 155, 39, 0.16);
+    }
+
+    .value-info {
+      flex: 1;
+    }
+
+    .value-title {
+      font-size: 0.94rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 2px;
+    }
+
+    .value-code {
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: var(--gold-dark);
+      margin-right: 5px;
+    }
+
+    .value-desc {
+      font-size: 0.82rem;
+      color: var(--slate);
+      line-height: 1.45;
+    }
+
+    .rank-badge {
+      flex-shrink: 0;
+      min-width: 46px;
+      height: 30px;
+      border-radius: 999px;
+      border: 1.5px dashed var(--border-strong);
+      background: var(--canvas);
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .value-card.is-selected .rank-badge {
+      border: none;
+      background: var(--gold);
+      color: #FFFFFF;
+      box-shadow: 0 2px 6px rgba(197, 155, 39, 0.35);
+    }
+
+    /* ==========================================================================
+       底部固定导航栏（作答步骤显示）
+       ========================================================================== */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 520px;
+      z-index: 30;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-top: 1px solid var(--border);
+      padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+      display: none;
+      gap: 10px;
+    }
+
+    .bottom-nav.is-visible {
+      display: flex;
+    }
+
+    .bottom-nav .btn-secondary {
+      flex: 0 0 108px;
+    }
+
+    .bottom-nav .btn-primary {
+      flex: 1;
+    }
+
+    /* ==========================================================================
+       实时评估报告页样式
+       ========================================================================== */
+    .report-hero {
+      background: linear-gradient(145deg, var(--navy) 0%, #244775 100%);
+      color: #FFFFFF;
+      border-radius: var(--radius-lg);
+      padding: 22px 18px 20px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .report-kicker {
+      font-size: 0.74rem;
+      color: #F6E09F;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+    }
+
+    .report-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin: 0 0 8px;
+      line-height: 1.35;
+    }
+
+    .report-meta-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 0.76rem;
+    }
+
+    .meta-chip {
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      padding: 3px 9px;
+      border-radius: 999px;
+      color: rgba(255, 255, 255, 0.95);
+    }
+
+    .section-title-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1.5px solid var(--navy-soft);
+    }
+
+    .section-title-bar h2 {
+      font-size: 1.02rem;
+      font-weight: 800;
+      color: var(--navy);
+      margin: 0;
+    }
+
+    .section-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--gold-dark);
+      background: var(--gold-soft);
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    /* 图表容器 */
+    .svg-box {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin: 4px 0 14px;
+    }
+
+    .svg-box svg {
+      width: 100%;
+      max-width: 380px;
+      height: auto;
+      display: block;
+    }
+
+    /* 维度进度条列表 */
+    .dim-list {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+
+    .dim-row-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px;
+      font-size: 0.85rem;
+    }
+
+    .dim-name {
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .dim-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .dim-score {
+      font-weight: 800;
+      color: var(--navy);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .tier-pill {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+    }
+
+    .tier-high {
+      background: var(--gold-soft);
+      color: var(--gold-dark);
+      border: 1px solid rgba(197, 155, 39, 0.4);
+    }
+
+    .tier-mid {
+      background: var(--teal-soft);
+      color: var(--teal);
+      border: 1px solid rgba(35, 107, 122, 0.28);
+    }
+
+    .tier-low {
+      background: #EDF2F7;
+      color: var(--muted);
+    }
+
+    .dim-bar-track {
+      width: 100%;
+      height: 8px;
+      background: var(--navy-soft);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .dim-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+    }
+
+    /* 模块二坐标摘要 */
+    .axis-summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .axis-pill-card {
+      background: var(--canvas);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+    }
+
+    .axis-pill-label {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .axis-pill-val {
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .axis-pill-sub {
+      font-size: 0.74rem;
+      color: var(--slate);
+      margin-top: 2px;
+    }
+
+    /* 价值观 Top 3 展示 */
+    .top-values-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .top-value-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: var(--canvas);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+    }
+
+    .tv-rank {
+      flex-shrink: 0;
+      background: var(--gold);
+      color: #FFFFFF;
+      font-size: 0.74rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      margin-top: 1px;
+    }
+
+    .tv-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .tv-desc {
+      font-size: 0.8rem;
+      color: var(--slate);
+    }
+
+    /* 推荐专业族群卡片 */
+    .cluster-card {
+      border-radius: var(--radius-md);
+      border: 1.5px solid var(--border);
+      padding: 15px;
+      margin-bottom: 12px;
+      background: #FFFFFF;
+    }
+
+    .cluster-card.is-primary {
+      border-color: var(--navy);
+      background: linear-gradient(180deg, #FFFFFF 0%, #F7FAFE 100%);
+      box-shadow: 0 4px 14px rgba(27, 54, 93, 0.08);
+    }
+
+    .cluster-card.is-secondary {
+      border-color: rgba(197, 155, 39, 0.6);
+      background: linear-gradient(180deg, #FFFFFF 0%, #FEFDF8 100%);
+    }
+
+    .cluster-rank-tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 9px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+    }
+
+    .cluster-card.is-primary .cluster-rank-tag {
+      background: var(--navy);
+      color: #FFFFFF;
+    }
+
+    .cluster-card.is-secondary .cluster-rank-tag {
+      background: var(--gold);
+      color: #FFFFFF;
+    }
+
+    .cluster-title {
+      font-size: 1.06rem;
+      font-weight: 800;
+      color: var(--navy);
+      margin: 0 0 8px;
+    }
+
+    .major-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .major-tag {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--navy);
+      background: var(--navy-soft);
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .cluster-note {
+      font-size: 0.83rem;
+      color: var(--slate);
+      line-height: 1.55;
+      background: rgba(255, 255, 255, 0.8);
+      border-left: 3px solid var(--gold);
+      padding: 8px 10px;
+      border-radius: 0 6px 6px 0;
+    }
+
+    /* 全部 6 大族群排行小表 */
+    .all-clusters-list {
+      margin-top: 10px;
+      border-top: 1px dashed var(--border-strong);
+      padding-top: 10px;
+    }
+
+    .all-clusters-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .mini-cluster-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      padding: 5px 0;
+      border-bottom: 1px solid #F1F5F9;
+      color: var(--slate);
+    }
+
+    .mini-cluster-row:last-child {
+      border-bottom: none;
+    }
+
+    /* 特殊诊断模式提示卡 */
+    .alert-card {
+      border-radius: var(--radius-md);
+      border: 1.5px solid rgba(197, 155, 39, 0.55);
+      background: var(--gold-soft);
+      padding: 14px 15px;
+      margin-bottom: 12px;
+    }
+
+    .alert-title {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: var(--navy);
+      margin: 0 0 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .alert-body {
+      font-size: 0.84rem;
+      color: #3A3320;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* 报告底部操作按钮组 */
+    .action-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .action-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    /* 合规声明 */
+    .compliance-footer {
+      margin-top: 16px;
+      padding: 14px;
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 0.78rem;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .compliance-footer strong {
+      color: var(--slate);
+    }
+
+    /* ==========================================================================
+       Toast 提示与自定义确认弹框（绝不使用原生 alert / confirm）
+       ========================================================================== */
+    .toast {
+      position: fixed;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-16px);
+      max-width: calc(100vw - 32px);
+      background: var(--navy-dark);
+      color: #FFFFFF;
+      padding: 11px 18px;
+      border-radius: 999px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease, transform 0.22s ease;
+      text-align: center;
+    }
+
+    .toast.is-show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(18, 38, 69, 0.52);
+      z-index: 90;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-backdrop.is-open {
+      display: flex;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 340px;
+      background: #FFFFFF;
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.24);
+    }
+
+    .modal-title {
+      font-size: 1.02rem;
+      font-weight: 800;
+      color: var(--navy);
+      margin: 0 0 8px;
+    }
+
+    .modal-desc {
+      font-size: 0.86rem;
+      color: var(--slate);
+      margin: 0 0 18px;
+      line-height: 1.55;
+    }
+
+    .modal-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    /* ==========================================================================
+       打印 / 导出 PDF 专用样式
+       ========================================================================== */
+    @media print {
+      body {
+        background: #FFFFFF !important;
+        padding: 0 !important;
+      }
+      .app-shell {
+        max-width: 100% !important;
+        box-shadow: none !important;
+        border: none !important;
+        border-radius: 0 !important;
+        background: #FFFFFF !important;
+      }
+      .sticky-header,
+      .bottom-nav,
+      .no-print,
+      .toast,
+      .modal-backdrop {
+        display: none !important;
+      }
+      .main-stage {
+        padding: 0 !important;
+      }
+      .card,
+      .report-hero,
+      .cluster-card,
+      .alert-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        box-shadow: none !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- 顶部粘性进度条（仅在步骤 1-6 显示） -->
+    <header id="stickyHeader" class="sticky-header" aria-label="测评进度">
+      <div class="progress-meta">
+        <div class="progress-module">
+          <span id="headerModuleName">模块一 · 学科思维</span>
+          <span id="headerStepPill" class="progress-step-pill">第 1 / 6 步</span>
+        </div>
+        <span id="headerPct" class="progress-pct">0%</span>
+      </div>
+      <div class="progress-track">
+        <div id="progressFill" class="progress-fill"></div>
+      </div>
+    </header>
+
+    <!-- 动态渲染主舞台 -->
+    <main id="mainStage" class="main-stage is-cover" aria-live="polite"></main>
+
+    <!-- 底部固定导航（仅在步骤 1-6 显示） -->
+    <nav id="bottomNav" class="bottom-nav" aria-label="问卷翻页控制">
+      <button type="button" id="btnPrev" class="btn-secondary">上一步</button>
+      <button type="button" id="btnNext" class="btn-primary">下一步</button>
+    </nav>
+  </div>
+
+  <!-- 轻量消息提示 -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- 自定义重置确认弹窗（替代原生 confirm） -->
+  <div id="resetModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="resetModalTitle">
+    <div class="modal-box">
+      <h3 id="resetModalTitle" class="modal-title">确认重新开始测评？</h3>
+      <p class="modal-desc">重新测试将清空当前所有作答记录与评估结果，回到封面页。</p>
+      <div class="modal-actions">
+        <button type="button" id="btnCancelReset" class="btn-secondary" style="min-height: 44px;">取消</button>
+        <button type="button" id="btnConfirmReset" class="btn-primary" style="min-height: 44px;">确认清空</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      /* ========================================================================
+         一、结构化题库与专业映射配置（严格核对原文）
+         ======================================================================== */
+      const FRAMEWORKS = [
+        {
+          name: '霍兰德职业兴趣理论（RIASEC / SDS）与 O*NET Interest Profiler',
+          desc: 'John Holland / 美国劳工部 O*NET 中心：聚焦与数理化经高度相关的研究型（I）、工程型（R）、企业型（E）与系统型（C）维度。'
+        },
+        {
+          name: '普雷迪格工作世界二维模型（ACT World-of-Work Map）',
+          desc: 'Dale Prediger（ACT 核心生涯模型）：以「深度原理 vs. 实践应用」「物/数据/系统 vs. 人/市场/组织」双轴区分纯理、工科、计算与商科。'
+        },
+        {
+          name: '斯特朗职业兴趣量表（Strong Interest Inventory, SII）',
+          desc: 'CPP / The Myers-Briggs Company：借鉴基本兴趣与学习风格量表，把题目锚定到 4 门在读 A-Level 课程的真实体感场景。'
+        },
+        {
+          name: '施恩职业锚与舒伯工作价值观量表（Career Anchors & WVI）',
+          desc: 'Edgar Schein（MIT）与 Donald Super：通过长期价值观排序，在多个方向得分接近时识别核心内在驱动力。'
+        },
+        {
+          name: '香港教育局生涯规划框架（EDB Life Planning Education）',
+          desc: '香港教育局（EDB）：对应高中阶段「自我认识（兴趣/能力/价值观）→ 学科联结 → 大学专业族群匹配」的科学探索路径。'
+        }
+      ];
+
+      const MODULE1_QUESTIONS = [
+        { id: 1, dim: 'A', text: '学物理或数学时，我不仅想知道公式怎么套用，还常常忍不住追问「这个定理底层是怎么一步步推导出来的」。' },
+        { id: 2, dim: 'B', text: '看到一台精密机器、新能源电池、芯片或复杂建筑结构时，我会好奇它的物理构造、材料特性以及怎么把它造得更高效。' },
+        { id: 3, dim: 'C', text: '面对一大堆杂乱的数据或复杂规则，我喜欢找出背后的数学规律，甚至用公式、表格或写一段代码把它们自动化理顺。' },
+        { id: 4, dim: 'D', text: '看新闻里提到美联储加息、企业财报、某品牌涨价或行业竞争时，我会自然去套用经济学里的供需、激励或博弈逻辑来分析。' },
+        { id: 5, dim: 'E', text: '相比只钻研单一学科的深水区，我更喜欢把两套不同领域的知识串起来（比如用物理/算法思维看商业，或把新技术做成别人愿意买单的产品）。' },
+        { id: 6, dim: 'A', text: '做化学或物理实验时，如果数据出现微小异常，我愿意花时间反复排查变量和误差，而不是草草交差。' },
+        { id: 7, dim: 'B', text: '如果有一个课外项目，我宁愿动手设计、组装、测试一个真实可见的作品或原型，也不愿只停留在纸面推导。' },
+        { id: 8, dim: 'C', text: '做数学题时，遇到需要分步拆解、建立抽象模型或找最优解的逻辑难题，解出来会让我有很强的爽感。' },
+        { id: 9, dim: 'D', text: '在小组讨论或商业案例分析中，我享受提出判断、权衡风险收益，并用有理有据的逻辑说服大家采纳我的方案。' },
+        { id: 10, dim: 'E', text: '比起在安静的实验室或电脑前单打独斗，我更希望自己的技术或分析能力能直接对接真实行业，解决看得见的现实效率问题。' },
+        { id: 11, dim: 'A', text: '即使某个科学问题短期内看不到怎么赚钱或有什么实用价值，只要它在理论上足够深刻、逻辑自洽，我依然觉得很有意思。' },
+        { id: 12, dim: 'B', text: '我对「物理与化学如何改变现实世界」（如新能源、半导体、新材料、航空航天、机器人、基建等）有持续的关注欲。' },
+        { id: 13, dim: 'C', text: '我愿意花几个小时对着屏幕调试逻辑、优化算法、分析统计图表，只要最终能跑出精准的结果。' },
+        { id: 14, dim: 'D', text: '在经济学课上，我对金融市场、公司估值、资本运作、国际贸易或公共政策背后的利益博弈，比纯理论模型更有代入感。' },
+        { id: 15, dim: 'E', text: '如果以后进科技或金融行业，我更想成为「既懂技术原理、又懂商业变现」的桥梁型角色，而不是纯写代码或纯做销售。' },
+        { id: 16, dim: 'A', text: '读科普书、学术文章或看硬核知识视频时，我对基础学科（如量子力学、有机反应机理、纯数学证明等）的耐心明显高于商业八卦。' },
+        { id: 17, dim: 'B', text: '物理里的力学/电磁学，或化学里的反应工程与材料性质，只要结合到真实工业场景，我就比纯背概念更容易学进去。' },
+        { id: 18, dim: 'C', text: '相比死记硬背大量化学方程式或经济名词，我明显更擅长处理符号、函数、概率统计和严密的逻辑推理。' },
+        { id: 19, dim: 'D', text: '我对「人是如何做选择的」「市场为什么会出现泡沫或失灵」「一家公司为什么能打败对手」这类问题抱有强烈好奇。' },
+        { id: 20, dim: 'E', text: '规划复杂任务时，我既关注核心方案在技术上行不行得通，也会本能地考虑成本、时间、用户体验和落地可行性。' }
+      ];
+
+      const LIKERT_LABELS = [
+        { val: 1, short: '极不符' },
+        { val: 2, short: '较不符' },
+        { val: 3, short: '一般' },
+        { val: 4, short: '较符合' },
+        { val: 5, short: '很符合' }
+      ];
+
+      const MODULE2_QUESTIONS = [
+        {
+          id: 21,
+          group: 1,
+          axis: 'v',
+          text: '面对一个陌生概念，你更舒服的入门方式是：',
+          optA: '先把底层定义、数学推导和边界条件彻底搞懂，再看例子',
+          optB: '先看它在现实中长什么样、怎么用，再反过来补原理'
+        },
+        {
+          id: 22,
+          group: 1,
+          axis: 'v',
+          text: '同样拿高分，哪类作业让你更有成就感？',
+          optA: '完成一道极其严谨的数学/物理证明，或写出逻辑滴水不漏的深度分析报告',
+          optB: '设计出一个能跑通的方案、模型、程序或实操作品并展示效果'
+        },
+        {
+          id: 23,
+          group: 1,
+          axis: 'v',
+          text: '设想大学四年的主要学习场景，你更倾向：',
+          optA: '跟着教授做深度研究、读文献、推公式、泡实验室或做学术论文',
+          optB: '做企业真实案例、工程项目、黑客松（Hackathon）或商业实战实习'
+        },
+        {
+          id: 24,
+          group: 1,
+          axis: 'v',
+          text: '遇到一个没有标准答案的开放问题时，你的第一反应是：',
+          optA: '试图抽象出通用规律或理论框架，追求逻辑上的完备',
+          optB: '尽快找到当前条件下最可行、最划算的解决方案，边做边改'
+        },
+        {
+          id: 25,
+          group: 2,
+          axis: 'h',
+          text: '平时学习 4 门 A-Level 课程时，哪两门让你投入同样时间后感觉更顺手、内耗更小？',
+          optA: '数学 + 物理 / 化学（更偏客观规律、公式、结构与计算）',
+          optB: '数学 + 经济（更偏社会运行、商业逻辑、文字论证与决策）'
+        },
+        {
+          id: 26,
+          group: 2,
+          axis: 'h',
+          text: '如果未来工作每天要花 70% 的时间做一件事，你更能接受：',
+          optA: '与复杂系统打交道（代码、算法、仪器、材料、数学模型、数据结构）',
+          optB: '与人和市场打交道（客户沟通、团队协作、投资决策、商业谈判、战略规划）'
+        },
+        {
+          id: 27,
+          group: 2,
+          axis: 'h',
+          text: '当小组作业进度卡住时，你通常更自然地承担哪种角色？',
+          optA: '技术攻坚手：闷头把最难的计算、建模、实验或技术环节啃下来',
+          optB: '统筹推进者：理清分工、整合观点、把控方向并负责最终上台陈述'
+        },
+        {
+          id: 28,
+          group: 2,
+          axis: 'h',
+          text: '评价一件事做得「成不成功」，你内心更看重：',
+          optA: '客观精度：答案是不是最优、误差够不够小、技术有没有突破',
+          optB: '外部反馈：方案有没有被市场认可、有没有说服对方、产生了多大影响力'
+        }
+      ];
+
+      const MODULE3_VALUES = [
+        { code: 'V1', title: '专业壁垒', desc: '成为某个硬核领域的专家，靠别人难以替代的专业深度立足' },
+        { code: 'V2', title: '财富回报', desc: '进入高薪、高天花板行业，能最快看到个人能力带来的经济回报' },
+        { code: 'V3', title: '探索求知', desc: '持续接触前沿科学或未知问题，满足纯粹的智力好奇心' },
+        { code: 'V4', title: '商业掌控', desc: '带团队、管资源、做关键决策，在商业世界拥有话语权' },
+        { code: 'V5', title: '创造实体', desc: '做出看得见、摸得着的技术、软件或硬件产品，改变人们生活' },
+        { code: 'V6', title: '稳定确定', desc: '路径清晰、社会认可度高、专业资格明确，抗风险能力强' },
+        { code: 'V7', title: '自由自主', desc: '不喜欢按部就班，希望工作方式灵活、有空间做自己的创意或创业' },
+        { code: 'V8', title: '社会影响', desc: '所做的事能推动能源、环保、政策、科技普惠等宏观议题进步' }
+      ];
+
+      const DIMENSIONS = [
+        { key: 'A', name: '基础科研与理论推导', short: 'A 基础科研', en: 'Pure Science', qIds: [1, 6, 11, 16] },
+        { key: 'B', name: '工程建造与硬科技', short: 'B 工程硬科技', en: 'Engineering', qIds: [2, 7, 12, 17] },
+        { key: 'C', name: '计算、算法与数据建模', short: 'C 计算与数据', en: 'Computing & Data', qIds: [3, 8, 13, 18] },
+        { key: 'D', name: '经济、金融与商业决策', short: 'D 经济与商科', en: 'Business & Econ', qIds: [4, 9, 14, 19] },
+        { key: 'E', name: '科技与商业跨界整合', short: 'E 跨界整合', en: 'Interdisciplinary', qIds: [5, 10, 15, 20] }
+      ];
+
+      const MAJOR_CLUSTERS = [
+        {
+          id: 'pure_science',
+          name: '基础理学类',
+          majors: ['数学', '物理', '化学', '自然科学', '理论/计算物理'],
+          note: '数理化全覆盖，基础扎实；若瞄准高阶纯数学或理论物理，需逐校核验是否偏好 Further Mathematics。'
+        },
+        {
+          id: 'engineering',
+          name: '传统与前沿工程类',
+          majors: ['电子与电气工程', '机械与自动化', '材料科学与工程', '化学与生物分子工程', '能源与环境工程', '土木/结构工程'],
+          note: '物理+化学+数学几乎覆盖除纯生物医学外的大多数工科；需逐校核验具体工程分支的科目要求。'
+        },
+        {
+          id: 'computing_ai',
+          name: '计算、AI 与数据科学类',
+          majors: ['计算机科学 (CS)', '人工智能 (AI)', '数据科学', '计算机工程', '机器人与智能系统'],
+          note: '数学+物理是极强信号；港校近年在该领域新增与重组专业较多，须核验当年最新课程清单与先修要求。'
+        },
+        {
+          id: 'quant_fintech',
+          name: '量化金融与科技商科类',
+          majors: ['量化金融 (QFin)', '金融科技 (FinTech)', '精算', '商业分析 (BA)', '风险管理', '经济与金融'],
+          note: '数学+经济精准对口，物理加成强数理背书；港校部分高定量金融/精算类专业可能偏好进阶数学，须逐校核查当期官网口径。'
+        },
+        {
+          id: 'business_econ',
+          name: '商科与经济学类',
+          majors: ['工商管理 (BBA)', '环球商业 (GBUS)', '经济学', '会计与金融', '资产管理', '供应链与运营管理'],
+          note: '经济+数学提供扎实定量基础，物理/化学体现高强度学术承压能力；更看重课外实践、英文表达与面试表现。'
+        },
+        {
+          id: 'interdisciplinary',
+          name: '理工+商科跨学科双学位/复合项目',
+          majors: ['工程与商科双学位', '科技与管理双学位', '创新设计与科技', '智慧城市/可持续发展与金融'],
+          note: '「数理化+经济」文理兼修组合天然适配这类复合项目，香港多所高校设有专门的跨学科学院或双学位入口。'
+        }
+      ];
+
+      /* ========================================================================
+         二、应用状态与本地进度持久化
+         ======================================================================== */
+      const STORAGE_KEY = 'hk_ug_major_assessment_v1';
+
+      function createInitialState() {
+        return {
+          step: 0, // 0=封面, 1..4=模块一(每页5题), 5=模块二(8题), 6=模块三(8选3), 7=报告
+          studentName: '',
+          studentGrade: '11 年级',
+          accordionOpen: false,
+          m1: {}, // { 1: 4, 2: 5, ... }
+          m2: {}, // { 21: 'A', ... }
+          m3: []  // ['V1', 'V5', 'V2']
+        };
+      }
+
+      let state = loadState();
+      let toastTimer = null;
+
+      function loadState() {
+        try {
+          const raw = window.localStorage.getItem(STORAGE_KEY);
+          if (!raw) return createInitialState();
+          const parsed = JSON.parse(raw);
+          return Object.assign(createInitialState(), parsed);
+        } catch (err) {
+          return createInitialState();
+        }
+      }
+
+      function saveState() {
+        try {
+          window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (err) {
+          // 某些隐私模式或受限容器可能禁用 localStorage，静默降级
+        }
+      }
+
+      /* ========================================================================
+         三、通用辅助函数（安全转义、Toast、剪贴板复制）
+         ======================================================================== */
+      function escapeHtml(str) {
+        return String(str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function showToast(msg) {
+        const toastEl = document.getElementById('toast');
+        toastEl.textContent = msg;
+        toastEl.classList.add('is-show');
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () {
+          toastEl.classList.remove('is-show');
+        }, 2500);
+      }
+
+      /**
+       * 复制纯文本到剪贴板：优先采用 execCommand('copy')，兼容 iFrame 与微信浏览器
+       */
+      function copyTextToClipboard(text) {
+        try {
+          const textarea = document.createElement('textarea');
+          textarea.value = text;
+          textarea.setAttribute('readonly', '');
+          textarea.style.position = 'fixed';
+          textarea.style.top = '-9999px';
+          textarea.style.left = '-9999px';
+          document.body.appendChild(textarea);
+          textarea.focus();
+          textarea.select();
+          textarea.setSelectionRange(0, textarea.value.length);
+          const ok = document.execCommand('copy');
+          document.body.removeChild(textarea);
+          if (ok) {
+            showToast('评估报告已复制，可直接粘贴到微信发送');
+            return;
+          }
+        } catch (err) {
+          // 走降级分支
+        }
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(function () {
+              showToast('评估报告已复制，可直接粘贴到微信发送');
+            }).catch(function () {
+              showToast('当前环境限制自动复制，请长按报告文字手动复制');
+            });
+            return;
+          }
+        } catch (err2) {
+          // 忽略异常
+        }
+        showToast('当前环境限制自动复制，请使用「打印 / 保存 PDF」留存');
+      }
+
+      /* ========================================================================
+         四、核心实时打分与诊断引擎
+         ======================================================================== */
+      function computeReport() {
+        // 1. 计算模块一 A-E 维度分（每维 4-20 分）
+        const dims = DIMENSIONS.map(function (d) {
+          const score = d.qIds.reduce(function (sum, qId) {
+            return sum + (Number(state.m1[qId]) || 0);
+          }, 0);
+          let tier = '低驱动区';
+          let tierClass = 'tier-low';
+          let barColor = '#94A3B8';
+          if (score >= 16) {
+            tier = '核心强项';
+            tierClass = 'tier-high';
+            barColor = '#C59B27';
+          } else if (score >= 12) {
+            tier = '良好适配';
+            tierClass = 'tier-mid';
+            barColor = '#1B365D';
+          }
+          return {
+            key: d.key,
+            name: d.name,
+            short: d.short,
+            en: d.en,
+            score: score,
+            tier: tier,
+            tierClass: tierClass,
+            barColor: barColor
+          };
+        });
+
+        const dimMap = {};
+        dims.forEach(function (d) { dimMap[d.key] = d.score; });
+
+        // 2. 计算模块二二维坐标
+        let countA_v = 0, countB_v = 0, countA_h = 0, countB_h = 0;
+        MODULE2_QUESTIONS.forEach(function (q) {
+          const ans = state.m2[q.id];
+          if (q.axis === 'v') {
+            if (ans === 'A') countA_v++;
+            else if (ans === 'B') countB_v++;
+          } else {
+            if (ans === 'A') countA_h++;
+            else if (ans === 'B') countB_h++;
+          }
+        });
+
+        let vLabel = '原理与应用均衡型';
+        if (countA_v > countB_v) vLabel = '原理研究导向 (Depth)';
+        else if (countB_v > countA_v) vLabel = '应用落地导向 (Application)';
+
+        let hLabel = '系统与人际均衡型';
+        if (countA_h > countB_h) hLabel = '物 / 数据 / 系统导向';
+        else if (countB_h > countA_h) hLabel = '人 / 市场 / 组织导向';
+
+        // 坐标值范围 [-2, +2]：
+        // x: 负向 = 物/数据/系统，正向 = 人/市场/组织
+        // y: 正向 = 原理研究，负向 = 应用落地
+        const coordX = (countB_h - countA_h) / 2;
+        const coordY = (countA_v - countB_v) / 2;
+
+        // 3. 模块三价值观权重（Rank 1 = 3, Rank 2 = 2, Rank 3 = 1）
+        const valWeight = function (code) {
+          const idx = state.m3.indexOf(code);
+          if (idx === 0) return 3;
+          if (idx === 1) return 2;
+          if (idx === 2) return 1;
+          return 0;
+        };
+
+        const selectedValues = state.m3.map(function (code, idx) {
+          const item = MODULE3_VALUES.find(function (v) { return v.code === code; });
+          return {
+            rank: idx + 1,
+            code: code,
+            title: item ? item.title : code,
+            desc: item ? item.desc : ''
+          };
+        });
+
+        // 4. 计算六大香港本科专业族群加权亲和度
+        const A = dimMap.A, B = dimMap.B, C = dimMap.C, D = dimMap.D, E = dimMap.E;
+
+        const rawAffinities = {
+          pure_science:
+            A * 2.2 + C * 0.3 +
+            (coordY > 0 ? coordY * 2.2 : coordY * 0.8) +
+            (coordX < 0 ? Math.abs(coordX) * 1.8 : -coordX * 1.2) +
+            valWeight('V3') * 1.8 + valWeight('V1') * 1.2,
+
+          engineering:
+            B * 2.1 + A * 0.45 +
+            (coordY < 0 ? Math.abs(coordY) * 2.2 : -coordY * 0.8) +
+            (coordX < 0 ? Math.abs(coordX) * 1.8 : -coordX * 1.2) +
+            valWeight('V5') * 1.8 + valWeight('V1') * 1.0 + valWeight('V8') * 0.8,
+
+          computing_ai:
+            C * 2.1 + B * 0.45 +
+            (coordX < 0 ? Math.abs(coordX) * 2.0 : -coordX * 1.2) +
+            coordY * 0.25 +
+            valWeight('V1') * 1.4 + valWeight('V5') * 1.3 + valWeight('V3') * 1.0,
+
+          quant_fintech:
+            (C + D) * 1.22 + E * 0.25 +
+            (Math.abs(coordX) <= 1 ? 1.5 : 0.4) +
+            valWeight('V2') * 1.6 + valWeight('V1') * 1.3 + valWeight('V6') * 0.9,
+
+          business_econ:
+            D * 2.1 + E * 0.45 +
+            (coordX > 0 ? coordX * 2.4 : coordX * 1.2) +
+            (coordY < 0 ? Math.abs(coordY) * 0.8 : 0) +
+            valWeight('V2') * 1.4 + valWeight('V4') * 1.8 + valWeight('V6') * 0.8,
+
+          interdisciplinary:
+            E * 2.2 + Math.max(B, C) * 0.25 + D * 0.2 +
+            (coordX === 0 ? 2.4 : Math.abs(coordX) === 1 ? 1.0 : -0.5) +
+            (coordY === 0 ? 1.8 : Math.abs(coordY) === 1 ? 0.6 : -0.5) +
+            valWeight('V4') * 1.2 + valWeight('V5') * 1.2 + valWeight('V7') * 1.6 + valWeight('V8') * 1.0
+        };
+
+        const rankedClusters = MAJOR_CLUSTERS.map(function (c) {
+          return Object.assign({}, c, {
+            affinity: Number((rawAffinities[c.id] || 0).toFixed(2))
+          });
+        }).sort(function (a, b) {
+          return b.affinity - a.affinity;
+        });
+
+        // 5. 特殊诊断模式识别
+        const scoresArr = dims.map(function (d) { return d.score; });
+        const maxScore = Math.max.apply(null, scoresArr);
+        const highDimCount = scoresArr.filter(function (s) { return s >= 16; }).length;
+
+        const alerts = [];
+
+        if (highDimCount >= 3) {
+          alerts.push({
+            type: 'multiHigh',
+            title: '特殊画像提示 · 多维高分型（' + highDimCount + ' 个维度 ≥ 16 分）',
+            body: '你的综合学术能力强、多个方向都表现出较高兴趣，目前尚未明显分化。建议优先用模块三的「价值观 Top 3」做减法（例如偏 V1/V3 可倾向科研与 AI，偏 V2/V4 可倾向商科与量化，偏 V5/V7 可倾向工程与跨界创新），同时重点关注香港高校的「学院大类招生（Broad-based Entry）」或双学位项目，入校后再细分主修。'
+          });
+        }
+
+        if (maxScore <= 13) {
+          alerts.push({
+            type: 'allLow',
+            title: '特殊画像提示 · 全维偏低型（最高维度 ' + maxScore + ' 分）',
+            body: '你目前可能主要停留在应对 A-Level 考试与刷题阶段，对大学专业和真实行业缺乏直观体感。切忌此时强行敲定专业，建议先花 2–3 个月进行低成本探索：对照香港高校理学院、工学院、商学院官网的「本科课程大纲（Curriculum Structure）」，具体看看大一到大四学哪些课程后再重测。'
+          });
+        }
+
+        const bizVsSystemContrast = (D >= maxScore - 1 && D >= 14) && (countA_v >= 3 && countA_h >= 3);
+        const sciVsMarketContrast = ((A >= maxScore - 1 && A >= 14) || (B >= maxScore - 1 && B >= 14)) && (countB_v >= 3 && countB_h >= 3);
+
+        if (bizVsSystemContrast || sciVsMarketContrast) {
+          const detail = bizVsSystemContrast
+            ? '你在模块一中对经济/商科（D 维）给出较高评价，但模块二的真实体感二选一显示你更偏爱「深度原理」与「物/数据/系统」（而非高频人际博弈）。这往往是受热门专业词汇影响的信号，建议以模块二真实学习体感与价值观权重为先，优先考虑数据科学、金融科技、工程或量化方向，而非纯人际导向的管理/营销类商科。'
+            : '你在模块一中对基础科研或工程（A/B 维）评分较高，但模块二的真实体感二选一显示你更倾向「实践应用」与「人/市场/组织」。建议重点权衡模块二的日常工作偏好与长期价值观，可考虑科技与管理双学位、金融科技、商业分析等既能发挥数理优势又贴近商业落地的复合方向。';
+          alerts.push({
+            type: 'contrast',
+            title: '特殊画像提示 · 模块一与模块二体感反差',
+            body: detail
+          });
+        }
+
+        return {
+          dims: dims,
+          dimMap: dimMap,
+          countA_v: countA_v,
+          countB_v: countB_v,
+          countA_h: countA_h,
+          countB_h: countB_h,
+          vLabel: vLabel,
+          hLabel: hLabel,
+          coordX: coordX,
+          coordY: coordY,
+          selectedValues: selectedValues,
+          rankedClusters: rankedClusters,
+          alerts: alerts
+        };
+      }
+
+      /* ========================================================================
+         五、纯内联 SVG 图表渲染（五维雷达图 + 二维体感象限坐标图）
+         ======================================================================== */
+      function buildRadarSvg(dims) {
+        const cx = 190;
+        const cy = 152;
+        const maxR = 96;
+        const levels = [4, 8, 12, 16, 20];
+        const angles = [-90, -18, 54, 126, 198].map(function (deg) {
+          return (deg * Math.PI) / 180;
+        });
+
+        function polar(r, angle) {
+          return {
+            x: Number((cx + r * Math.cos(angle)).toFixed(1)),
+            y: Number((cy + r * Math.sin(angle)).toFixed(1))
+          };
+        }
+
+        // 网格五边形
+        const gridPolygons = levels.map(function (lv) {
+          const r = (lv / 20) * maxR;
+          const pts = angles.map(function (a) {
+            const p = polar(r, a);
+            return p.x + ',' + p.y;
+          }).join(' ');
+          const stroke = lv === 16 ? '#C59B27' : '#CBD5E0';
+          const dash = lv === 16 ? 'stroke-dasharray="4 3"' : '';
+          return '<polygon points="' + pts + '" fill="none" stroke="' + stroke + '" stroke-width="' + (lv === 20 ? '1.3' : '0.9') + '" ' + dash + ' />';
+        }).join('');
+
+        // 5 条辐射轴
+        const axisLines = angles.map(function (a) {
+          const p = polar(maxR, a);
+          return '<line x1="' + cx + '" y1="' + cy + '" x2="' + p.x + '" y2="' + p.y + '" stroke="#DCE4EE" stroke-width="1" />';
+        }).join('');
+
+        // 数据多边形
+        const dataPts = dims.map(function (d, idx) {
+          const r = (d.score / 20) * maxR;
+          return polar(r, angles[idx]);
+        });
+        const dataPolygonStr = dataPts.map(function (p) { return p.x + ',' + p.y; }).join(' ');
+
+        // 顶点圆点
+        const dots = dataPts.map(function (p) {
+          return '<circle cx="' + p.x + '" cy="' + p.y + '" r="4.5" fill="#C59B27" stroke="#FFFFFF" stroke-width="1.8" />';
+        }).join('');
+
+        // 维度外标签（手工微调位置避免移动端裁切）
+        const labelOffsets = [
+          { dx: 0, dy: -20, anchor: 'middle' },   // A 顶
+          { dx: 12, dy: -2, anchor: 'start' },    // B 右上
+          { dx: 10, dy: 16, anchor: 'start' },    // C 右下
+          { dx: -10, dy: 16, anchor: 'end' },     // D 左下
+          { dx: -12, dy: -2, anchor: 'end' }      // E 左上
+        ];
+
+        const labels = dims.map(function (d, idx) {
+          const edge = polar(maxR, angles[idx]);
+          const off = labelOffsets[idx];
+          const lx = Number((edge.x + off.dx).toFixed(1));
+          const ly = Number((edge.y + off.dy).toFixed(1));
+          return (
+            '<text x="' + lx + '" y="' + ly + '" text-anchor="' + off.anchor + '" font-size="11.5" font-weight="700" fill="#1B365D">' +
+            escapeHtml(d.short) +
+            '</text>' +
+            '<text x="' + lx + '" y="' + (ly + 14) + '" text-anchor="' + off.anchor + '" font-size="11" font-weight="800" fill="#9E7A17">' +
+            d.score + '分' +
+            '</text>'
+          );
+        }).join('');
+
+        // 刻度参考值（16分强项虚线标识）
+        const scaleTicks =
+          '<text x="' + (cx + 4) + '" y="' + (cy - maxR * 0.8 + 4) + '" font-size="9" fill="#9E7A17" font-weight="700">16</text>' +
+          '<text x="' + (cx + 4) + '" y="' + (cy - maxR + 4) + '" font-size="9" fill="#718096">20</text>';
+
+        return (
+          '<svg viewBox="0 0 380 302" role="img" aria-label="五维学科思维得分雷达图">' +
+            gridPolygons +
+            axisLines +
+            '<polygon points="' + dataPolygonStr + '" fill="rgba(27, 54, 93, 0.18)" stroke="#1B365D" stroke-width="2.2" stroke-linejoin="round" />' +
+            dots +
+            scaleTicks +
+            labels +
+          '</svg>'
+        );
+      }
+
+      function buildQuadrantSvg(coordX, coordY) {
+        // 坐标系绘制区：中心 (190, 140)，半宽 110，半高 92
+        const cx = 190;
+        const cy = 140;
+        const halfW = 108;
+        const halfH = 88;
+        const stepX = halfW / 2;
+        const stepY = halfH / 2;
+
+        const px = Number((cx + coordX * stepX).toFixed(1));
+        const py = Number((cy - coordY * stepY).toFixed(1));
+
+        const fmtCoord = function (v) {
+          return (v > 0 ? '+' : '') + v;
+        };
+
+        return (
+          '<svg viewBox="0 0 380 280" role="img" aria-label="模块二真实体感二维象限坐标图">' +
+            // 四象限浅底色
+            '<rect x="' + (cx - halfW) + '" y="' + (cy - halfH) + '" width="' + halfW + '" height="' + halfH + '" fill="#F2F6FB" />' +
+            '<rect x="' + cx + '" y="' + (cy - halfH) + '" width="' + halfW + '" height="' + halfH + '" fill="#FAF7EE" />' +
+            '<rect x="' + (cx - halfW) + '" y="' + cy + '" width="' + halfW + '" height="' + halfH + '" fill="#F4F9F9" />' +
+            '<rect x="' + cx + '" y="' + cy + '" width="' + halfW + '" height="' + halfH + '" fill="#FDF8F2" />' +
+
+            // 外框与辅助虚线
+            '<rect x="' + (cx - halfW) + '" y="' + (cy - halfH) + '" width="' + (halfW * 2) + '" height="' + (halfH * 2) + '" fill="none" stroke="#CBD5E0" stroke-width="1.2" rx="6" />' +
+            '<line x1="' + (cx - stepX) + '" y1="' + (cy - halfH) + '" x2="' + (cx - stepX) + '" y2="' + (cy + halfH) + '" stroke="#DCE4EE" stroke-dasharray="3 3" />' +
+            '<line x1="' + (cx + stepX) + '" y1="' + (cy - halfH) + '" x2="' + (cx + stepX) + '" y2="' + (cy + halfH) + '" stroke="#DCE4EE" stroke-dasharray="3 3" />' +
+            '<line x1="' + (cx - halfW) + '" y1="' + (cy - stepY) + '" x2="' + (cx + halfW) + '" y2="' + (cy - stepY) + '" stroke="#DCE4EE" stroke-dasharray="3 3" />' +
+            '<line x1="' + (cx - halfW) + '" y1="' + (cy + stepY) + '" x2="' + (cx + halfW) + '" y2="' + (cy + stepY) + '" stroke="#DCE4EE" stroke-dasharray="3 3" />' +
+
+            // 主坐标轴
+            '<line x1="' + (cx - halfW - 6) + '" y1="' + cy + '" x2="' + (cx + halfW + 6) + '" y2="' + cy + '" stroke="#1B365D" stroke-width="1.5" />' +
+            '<line x1="' + cx + '" y1="' + (cy - halfH - 6) + '" x2="' + cx + '" y2="' + (cy + halfH + 6) + '" stroke="#1B365D" stroke-width="1.5" />' +
+
+            // 象限提示文字
+            '<text x="' + (cx - halfW + 10) + '" y="' + (cy - halfH + 20) + '" font-size="10" fill="#64748B" font-weight="600">原理 × 系统/数据</text>' +
+            '<text x="' + (cx + halfW - 10) + '" y="' + (cy - halfH + 20) + '" text-anchor="end" font-size="10" fill="#64748B" font-weight="600">原理 × 人/市场</text>' +
+            '<text x="' + (cx - halfW + 10) + '" y="' + (cy + halfH - 12) + '" font-size="10" fill="#64748B" font-weight="600">应用 × 系统/数据</text>' +
+            '<text x="' + (cx + halfW - 10) + '" y="' + (cy + halfH - 12) + '" text-anchor="end" font-size="10" fill="#64748B" font-weight="600">应用 × 人/市场</text>' +
+
+            // 四端坐标轴名称
+            '<text x="' + cx + '" y="22" text-anchor="middle" font-size="11.5" font-weight="800" fill="#1B365D">↑ 深度原理 (Depth +2)</text>' +
+            '<text x="' + cx + '" y="264" text-anchor="middle" font-size="11.5" font-weight="800" fill="#1B365D">↓ 实践应用 (Application -2)</text>' +
+            '<text x="10" y="' + (cy - 10) + '" font-size="10.5" font-weight="700" fill="#1B365D">物 / 数据</text>' +
+            '<text x="10" y="' + (cy + 14) + '" font-size="10.5" font-weight="700" fill="#1B365D">系统 (-2)</text>' +
+            '<text x="370" y="' + (cy - 10) + '" text-anchor="end" font-size="10.5" font-weight="700" fill="#1B365D">人 / 市场</text>' +
+            '<text x="370" y="' + (cy + 14) + '" text-anchor="end" font-size="10.5" font-weight="700" fill="#1B365D">组织 (+2)</text>' +
+
+            // 定位点光晕与圆心
+            '<circle cx="' + px + '" cy="' + py + '" r="13" fill="rgba(197, 155, 39, 0.24)" />' +
+            '<circle cx="' + px + '" cy="' + py + '" r="6.5" fill="#C59B27" stroke="#1B365D" stroke-width="2.2" />' +
+
+            // 坐标值标签
+            '<rect x="' + (px - 36) + '" y="' + (py < cy - 55 ? py + 12 : py - 30) + '" width="72" height="20" rx="10" fill="#1B365D" />' +
+            '<text x="' + px + '" y="' + (py < cy - 55 ? py + 25.5 : py - 16.5) + '" text-anchor="middle" font-size="10" font-weight="700" fill="#FFFFFF">(' + fmtCoord(coordX) + ', ' + fmtCoord(coordY) + ')</text>' +
+          '</svg>'
+        );
+      }
+
+      /* ========================================================================
+         六、生成微信转发纯文本报告
+         ======================================================================== */
+      function buildShareText(report) {
+        const displayName = state.studentName.trim() || '未填写';
+        const dateStr = new Date().toLocaleDateString('zh-CN');
+        const m1Raw = MODULE1_QUESTIONS.map(function (q) { return state.m1[q.id]; }).join(',');
+        const m2Raw = MODULE2_QUESTIONS.map(function (q) { return state.m2[q.id]; }).join(',');
+        const m3Raw = state.m3.join(',');
+
+        const lines = [];
+        lines.push('【数理化经背景 · 香港本科专业方向探索报告】');
+        lines.push('学生：' + displayName + ' ｜ 年级：' + state.studentGrade + ' ｜ 日期：' + dateStr);
+        lines.push('在读选科：A-Level 数学、物理、化学、经济');
+        lines.push('');
+        lines.push('一、模块一 · 学科思维五维得分（满分 20 分）');
+        report.dims.forEach(function (d) {
+          lines.push('· ' + d.key + ' ' + d.name + '：' + d.score + '/20（' + d.tier + '）');
+        });
+        lines.push('');
+        lines.push('二、模块二 · 真实体感二维坐标');
+        lines.push('· 纵轴（原理 vs. 应用）：' + report.vLabel + '（A:' + report.countA_v + ' / B:' + report.countB_v + '，Y=' + report.coordY + '）');
+        lines.push('· 横轴（系统 vs. 人际）：' + report.hLabel + '（A:' + report.countA_h + ' / B:' + report.countB_h + '，X=' + report.coordX + '）');
+        lines.push('');
+        lines.push('三、模块三 · 长期驱动力与价值观 Top 3');
+        report.selectedValues.forEach(function (v) {
+          lines.push('· 第 ' + v.rank + ' 名：' + v.code + ' ' + v.title);
+        });
+        lines.push('');
+        lines.push('四、香港本科重点探索专业族群');
+        const top1 = report.rankedClusters[0];
+        const top2 = report.rankedClusters[1];
+        lines.push('1. 主攻专业族群：' + top1.name);
+        lines.push('   代表方向：' + top1.majors.join('、'));
+        lines.push('   选科提示：' + top1.note);
+        lines.push('2. 重点探索/备选族群：' + top2.name);
+        lines.push('   代表方向：' + top2.majors.join('、'));
+        lines.push('   选科提示：' + top2.note);
+
+        if (report.alerts.length > 0) {
+          lines.push('');
+          lines.push('五、特殊画像诊断提示');
+          report.alerts.forEach(function (a) {
+            lines.push('· ' + a.title + '：' + a.body);
+          });
+        }
+
+        lines.push('');
+        lines.push('--- 原始作答编码（供顾问复核） ---');
+        lines.push('M1:[' + m1Raw + ']');
+        lines.push('M2:[' + m2Raw + ']');
+        lines.push('M3:[' + m3Raw + ']');
+        lines.push('');
+        lines.push('使用边界声明：本问卷为结构化自我探索工具，不构成标准化心理诊断，亦不代表任何院校录取偏好；具体专业先修科目与招生口径，以院校及香港入境事务处等官方当期发布为准。');
+
+        return lines.join('\n');
+      }
+
+      /* ========================================================================
+         七、界面渲染逻辑（各屏幕独立渲染）
+         ======================================================================== */
+      const mainStage = document.getElementById('mainStage');
+      const stickyHeader = document.getElementById('stickyHeader');
+      const bottomNav = document.getElementById('bottomNav');
+      const headerModuleName = document.getElementById('headerModuleName');
+      const headerStepPill = document.getElementById('headerStepPill');
+      const headerPct = document.getElementById('headerPct');
+      const progressFill = document.getElementById('progressFill');
+      const btnPrev = document.getElementById('btnPrev');
+      const btnNext = document.getElementById('btnNext');
+
+      function updateProgressBar() {
+        // 总计 31 个交互计分单位：M1 20 题 + M2 8 题 + M3 3 项选择 = 31
+        const answeredCount =
+          Object.keys(state.m1).length +
+          Object.keys(state.m2).length +
+          state.m3.length;
+        const pct = Math.min(100, Math.round((answeredCount / 31) * 100));
+
+        headerPct.textContent = pct + '%';
+        progressFill.style.width = pct + '%';
+
+        if (state.step >= 1 && state.step <= 4) {
+          headerModuleName.textContent = '模块一 · 学科思维 (' + state.step + '/4)';
+        } else if (state.step === 5) {
+          headerModuleName.textContent = '模块二 · 真实体感校准';
+        } else if (state.step === 6) {
+          headerModuleName.textContent = '模块三 · 价值观排序';
+        }
+        headerStepPill.textContent = '第 ' + state.step + ' / 6 步';
+      }
+
+      function updateNavigationChrome() {
+        const isQuizStep = state.step >= 1 && state.step <= 6;
+        stickyHeader.classList.toggle('is-visible', isQuizStep);
+        bottomNav.classList.toggle('is-visible', isQuizStep);
+        mainStage.classList.toggle('is-cover', state.step === 0);
+        mainStage.classList.toggle('is-report', state.step === 7);
+
+        if (isQuizStep) {
+          updateProgressBar();
+          btnPrev.textContent = state.step === 1 ? '返回首页' : '上一步';
+          if (state.step === 6) {
+            const count = state.m3.length;
+            btnNext.disabled = count < 3;
+            btnNext.classList.add('btn-gold');
+            btnNext.textContent = count === 3
+              ? '生成实时评估报告'
+              : '请选择 3 项价值观 (' + count + '/3)';
+          } else {
+            btnNext.disabled = false;
+            btnNext.classList.remove('btn-gold');
+            btnNext.textContent = '下一步';
+          }
+        }
+      }
+
+      /* --- Screen 0：封面页 --- */
+      function renderCover() {
+        const grades = ['10 年级', '11 年级', '12 年级'];
+        const hasProgress =
+          Object.keys(state.m1).length > 0 ||
+          Object.keys(state.m2).length > 0 ||
+          state.m3.length > 0;
+
+        const frameworksHtml = FRAMEWORKS.map(function (f) {
+          return (
+            '<div class="framework-item">' +
+              '<div class="framework-name">' + escapeHtml(f.name) + '</div>' +
+              '<div class="framework-meta">' + escapeHtml(f.desc) + '</div>' +
+            '</div>'
+          );
+        }).join('');
+
+        mainStage.innerHTML =
+          '<div class="fade-enter">' +
+            '<section class="card hero-card">' +
+              '<span class="hero-eyebrow">A-Level 数学 · 物理 · 化学 · 经济专属 ｜ 约 8–10 分钟</span>' +
+              '<h1 class="hero-title">数理化经背景 · 香港本科专业方向探索问卷</h1>' +
+              '<p class="hero-desc">结合 4 门在读课程的能力信号与五大国际生涯心理学框架，通过 36 项结构化探索题，帮助你科学收敛出 1–2 个香港本科主攻专业族群。</p>' +
+            '</section>' +
+
+            '<div class="instruction-box">' +
+              '<strong>给同学的小提示：</strong>这不是考试，没有标准答案，请完全凭过去一年学习与日常真实第一反应作答。全部完成后将即时生成可视化评估报告。' +
+            '</div>' +
+
+            '<section class="card">' +
+              '<div class="form-section-title">' +
+                '<span>基本信息</span>' +
+                '<span class="form-section-sub">仅用于本地报告展示，不上传服务器</span>' +
+              '</div>' +
+              '<div class="input-group">' +
+                '<label class="input-label" for="studentNameInput">学生昵称 / 姓名（选填）</label>' +
+                '<input id="studentNameInput" class="text-input" type="text" maxlength="20" placeholder="例如：Alex 或 小林" value="' + escapeHtml(state.studentName) + '" />' +
+              '</div>' +
+              '<div class="input-group">' +
+                '<span class="input-label">当前年级</span>' +
+                '<div class="grade-selector">' +
+                  grades.map(function (g) {
+                    const cls = state.studentGrade === g ? 'grade-btn is-selected' : 'grade-btn';
+                    return '<button type="button" class="' + cls + '" data-grade="' + g + '">' + g + '</button>';
+                  }).join('') +
+                '</div>' +
+              '</div>' +
+            '</section>' +
+
+            '<section id="frameworkAccordion" class="card accordion-card' + (state.accordionOpen ? ' is-open' : '') + '">' +
+              '<button type="button" id="accordionToggle" class="accordion-trigger" aria-expanded="' + (state.accordionOpen ? 'true' : 'false') + '">' +
+                '<span>参考的科学量化测评体系（5 大框架）</span>' +
+                '<svg class="accordion-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>' +
+              '</button>' +
+              '<div class="accordion-body">' + frameworksHtml + '</div>' +
+            '</section>' +
+
+            '<button type="button" id="btnStart" class="btn-primary">' +
+              (hasProgress ? '继续测评' : '开始测评') +
+            '</button>' +
+          '</div>';
+
+        // 绑定封面页事件
+        const nameInput = document.getElementById('studentNameInput');
+        nameInput.addEventListener('input', function (e) {
+          state.studentName = e.target.value;
+          saveState();
+        });
+
+        mainStage.querySelectorAll('.grade-btn').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            state.studentGrade = btn.getAttribute('data-grade');
+            saveState();
+            mainStage.querySelectorAll('.grade-btn').forEach(function (b) {
+              b.classList.toggle('is-selected', b === btn);
+            });
+          });
+        });
+
+        document.getElementById('accordionToggle').addEventListener('click', function () {
+          state.accordionOpen = !state.accordionOpen;
+          const acc = document.getElementById('frameworkAccordion');
+          acc.classList.toggle('is-open', state.accordionOpen);
+          this.setAttribute('aria-expanded', state.accordionOpen ? 'true' : 'false');
+        });
+
+        document.getElementById('btnStart').addEventListener('click', function () {
+          goToStep(1);
+        });
+      }
+
+      /* --- Steps 1–4：模块一（每页 5 题，共 20 题） --- */
+      function renderModule1Page(pageIndex) {
+        const start = (pageIndex - 1) * 5;
+        const pageQs = MODULE1_QUESTIONS.slice(start, start + 5);
+        const rangeLabel = '第 ' + (start + 1) + '–' + (start + 5) + ' 题（共 20 题）';
+
+        const cardsHtml = pageQs.map(function (q) {
+          const currentVal = state.m1[q.id];
+          const answeredCls = currentVal ? ' is-answered' : '';
+          const buttonsHtml = LIKERT_LABELS.map(function (item) {
+            const selCls = currentVal === item.val ? ' is-selected' : '';
+            return (
+              '<button type="button" class="likert-btn' + selCls + '" data-qid="' + q.id + '" data-val="' + item.val + '" aria-pressed="' + (currentVal === item.val ? 'true' : 'false') + '">' +
+                '<span>' + item.val + '</span>' +
+                '<span class="likert-tiny">' + item.short + '</span>' +
+              '</button>'
+            );
+          }).join('');
+
+          return (
+            '<article class="q-card' + answeredCls + '" id="qcard-' + q.id + '" data-qid="' + q.id + '">' +
+              '<div class="q-header">' +
+                '<span class="q-num">' + String(q.id).padStart(2, '0') + '</span>' +
+                '<p class="q-text">' + escapeHtml(q.text) + '</p>' +
+              '</div>' +
+              '<div class="likert-row">' + buttonsHtml + '</div>' +
+              '<div class="likert-ends"><span>1 = 非常不符合</span><span>5 = 非常符合</span></div>' +
+            '</article>'
+          );
+        }).join('');
+
+        mainStage.innerHTML =
+          '<div class="fade-enter">' +
+            '<div class="step-intro">' +
+              '<div class="step-kicker">Module 01 · ' + rangeLabel + '</div>' +
+              '<h2 class="step-heading">学科思维与问题偏好</h2>' +
+              '<p class="step-sub">请根据你过去一年的真实学习体感，为以下描述打分（1–5 分）。</p>' +
+            '</div>' +
+            '<div class="scale-guide-bar">' +
+              '<span><strong>1</strong> 非常不符</span>' +
+              '<span><strong>2</strong> 较不符</span>' +
+              '<span><strong>3</strong> 一般/无感</span>' +
+              '<span><strong>4</strong> 较符合</span>' +
+              '<span><strong>5</strong> 非常符合</span>' +
+            '</div>' +
+            cardsHtml +
+          '</div>';
+
+        mainStage.querySelectorAll('.likert-btn').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            const qId = Number(btn.getAttribute('data-qid'));
+            const val = Number(btn.getAttribute('data-val'));
+            state.m1[qId] = val;
+            saveState();
+
+            const card = document.getElementById('qcard-' + qId);
+            card.classList.remove('is-missing');
+            card.classList.add('is-answered');
+            card.querySelectorAll('.likert-btn').forEach(function (b) {
+              const active = Number(b.getAttribute('data-val')) === val;
+              b.classList.toggle('is-selected', active);
+              b.setAttribute('aria-pressed', active ? 'true' : 'false');
+            });
+            updateProgressBar();
+          });
+        });
+      }
+
+      /* --- Step 5：模块二（8 题二选一） --- */
+      function renderModule2() {
+        const group1 = MODULE2_QUESTIONS.filter(function (q) { return q.group === 1; });
+        const group2 = MODULE2_QUESTIONS.filter(function (q) { return q.group === 2; });
+
+        function renderChoiceCards(list) {
+          return list.map(function (q) {
+            const current = state.m2[q.id];
+            const answeredCls = current ? ' is-answered' : '';
+            return (
+              '<article class="q-card' + answeredCls + '" id="qcard-' + q.id + '" data-qid="' + q.id + '">' +
+                '<div class="q-header">' +
+                  '<span class="q-num">' + q.id + '</span>' +
+                  '<p class="q-text">' + escapeHtml(q.text) + '</p>' +
+                '</div>' +
+                '<div class="ab-stack">' +
+                  '<button type="button" class="ab-btn' + (current === 'A' ? ' is-selected' : '') + '" data-qid="' + q.id + '" data-choice="A" aria-pressed="' + (current === 'A' ? 'true' : 'false') + '">' +
+                    '<span class="ab-badge">A</span>' +
+                    '<span class="ab-copy">' + escapeHtml(q.optA) + '</span>' +
+                  '</button>' +
+                  '<button type="button" class="ab-btn' + (current === 'B' ? ' is-selected' : '') + '" data-qid="' + q.id + '" data-choice="B" aria-pressed="' + (current === 'B' ? 'true' : 'false') + '">' +
+                    '<span class="ab-badge">B</span>' +
+                    '<span class="ab-copy">' + escapeHtml(q.optB) + '</span>' +
+                  '</button>' +
+                '</div>' +
+              '</article>'
+            );
+          }).join('');
+        }
+
+        mainStage.innerHTML =
+          '<div class="fade-enter">' +
+            '<div class="step-intro">' +
+              '<div class="step-kicker">Module 02 · 第 21–28 题（共 8 题）</div>' +
+              '<h2 class="step-heading">真实体感二选一校准</h2>' +
+              '<p class="step-sub">强制单选 A 或 B，请选出更接近你本能的那一个。</p>' +
+            '</div>' +
+            '<div class="group-banner">第一组（深度原理 vs. 实践应用）</div>' +
+            renderChoiceCards(group1) +
+            '<div class="group-banner">第二组（系统/物/数据 vs. 人/市场/组织）</div>' +
+            renderChoiceCards(group2) +
+          '</div>';
+
+        mainStage.querySelectorAll('.ab-btn').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            const qId = Number(btn.getAttribute('data-qid'));
+            const choice = btn.getAttribute('data-choice');
+            state.m2[qId] = choice;
+            saveState();
+
+            const card = document.getElementById('qcard-' + qId);
+            card.classList.remove('is-missing');
+            card.classList.add('is-answered');
+            card.querySelectorAll('.ab-btn').forEach(function (b) {
+              const active = b.getAttribute('data-choice') === choice;
+              b.classList.toggle('is-selected', active);
+              b.setAttribute('aria-pressed', active ? 'true' : 'false');
+            });
+            updateProgressBar();
+          });
+        });
+      }
+
+      /* --- Step 6：模块三（价值观 8 选 3 排序） --- */
+      function renderModule3() {
+        const slotsHtml = [0, 1, 2].map(function (idx) {
+          const code = state.m3[idx];
+          const item = code ? MODULE3_VALUES.find(function (v) { return v.code === code; }) : null;
+          if (item) {
+            return (
+              '<div class="rank-slot is-filled">' +
+                '<span class="rank-slot-num">第 ' + (idx + 1) + ' 顺位</span>' +
+                '<span>' + escapeHtml(item.title) + '</span>' +
+              '</div>'
+            );
+          }
+          return (
+            '<div class="rank-slot">' +
+              '<span class="rank-slot-num">第 ' + (idx + 1) + ' 顺位</span>' +
+              '<span>待点击</span>' +
+            '</div>'
+          );
+        }).join('');
+
+        const cardsHtml = MODULE3_VALUES.map(function (v) {
+          const rankIdx = state.m3.indexOf(v.code);
+          const isSelected = rankIdx !== -1;
+          const badgeText = isSelected ? ('第' + (rankIdx + 1)) : '选择';
+          return (
+            '<button type="button" class="value-card' + (isSelected ? ' is-selected' : '') + '" data-vcode="' + v.code + '" aria-pressed="' + (isSelected ? 'true' : 'false') + '">' +
+              '<div class="value-info">' +
+                '<div class="value-title"><span class="value-code">' + v.code + '</span>' + escapeHtml(v.title) + '</div>' +
+                '<div class="value-desc">' + escapeHtml(v.desc) + '</div>' +
+              '</div>' +
+              '<span class="rank-badge">' + badgeText + '</span>' +
+            '</button>'
+          );
+        }).join('');
+
+        mainStage.innerHTML =
+          '<div class="fade-enter">' +
+            '<div class="step-intro">' +
+              '<div class="step-kicker">Module 03 · 8 选 3 并排序</div>' +
+              '<h2 class="step-heading">长期驱动力与价值观筛选</h2>' +
+              '<p class="step-sub">设想大学毕业工作 5 年后的理想状态，依次点击选出对你最重要的 <strong>3 项</strong>（再次点击已选项可取消，顺位会自动递补）。</p>' +
+            '</div>' +
+            '<div class="rank-summary-bar">' +
+              '<div class="rank-summary-title">' +
+                '<span>当前 Top 3 排序</span>' +
+                '<span>已选 ' + state.m3.length + ' / 3</span>' +
+              '</div>' +
+              '<div class="rank-slots">' + slotsHtml + '</div>' +
+            '</div>' +
+            '<div class="value-grid">' + cardsHtml + '</div>' +
+          '</div>';
+
+        mainStage.querySelectorAll('.value-card').forEach(function (card) {
+          card.addEventListener('click', function () {
+            const code = card.getAttribute('data-vcode');
+            const idx = state.m3.indexOf(code);
+            if (idx !== -1) {
+              // 取消选中并自动前移顺位
+              state.m3.splice(idx, 1);
+            } else {
+              if (state.m3.length >= 3) {
+                showToast('已选满 3 项，请先点击已选项取消后再替换');
+                return;
+              }
+              state.m3.push(code);
+            }
+            saveState();
+            renderModule3();
+            updateNavigationChrome();
+          });
+        });
+      }
+
+      /* --- Step 7：实时评估报告页 --- */
+      function renderReport() {
+        const report = computeReport();
+        const displayName = state.studentName.trim() ? (escapeHtml(state.studentName.trim()) + ' 的') : '个人';
+        const today = new Date().toLocaleDateString('zh-CN');
+
+        const radarSvg = buildRadarSvg(report.dims);
+        const quadSvg = buildQuadrantSvg(report.coordX, report.coordY);
+
+        const dimBarsHtml = report.dims.map(function (d) {
+          const pct = Math.round((d.score / 20) * 100);
+          return (
+            '<div>' +
+              '<div class="dim-row-top">' +
+                '<span class="dim-name">' + d.key + '｜' + escapeHtml(d.name) + '</span>' +
+                '<span class="dim-right">' +
+                  '<span class="dim-score">' + d.score + '/20</span>' +
+                  '<span class="tier-pill ' + d.tierClass + '">' + d.tier + '</span>' +
+                '</span>' +
+              '</div>' +
+              '<div class="dim-bar-track">' +
+                '<div class="dim-bar-fill" style="width:' + pct + '%;background:' + d.barColor + ';"></div>' +
+              '</div>' +
+            '</div>'
+          );
+        }).join('');
+
+        const valuesHtml = report.selectedValues.map(function (v) {
+          return (
+            '<div class="top-value-item">' +
+              '<span class="tv-rank">第 ' + v.rank + '</span>' +
+              '<div>' +
+                '<div class="tv-title">' + v.code + ' ' + escapeHtml(v.title) + '</div>' +
+                '<div class="tv-desc">' + escapeHtml(v.desc) + '</div>' +
+              '</div>' +
+            '</div>'
+          );
+        }).join('');
+
+        const top1 = report.rankedClusters[0];
+        const top2 = report.rankedClusters[1];
+
+        function renderClusterCard(cluster, isPrimary) {
+          const cls = isPrimary ? 'cluster-card is-primary' : 'cluster-card is-secondary';
+          const tag = isPrimary ? 'Top 1 · 优先主攻专业族群' : 'Top 2 · 重点探索 / 备选族群';
+          const tagsHtml = cluster.majors.map(function (m) {
+            return '<span class="major-tag">' + escapeHtml(m) + '</span>';
+          }).join('');
+          return (
+            '<div class="' + cls + '">' +
+              '<span class="cluster-rank-tag">' + tag + '</span>' +
+              '<h3 class="cluster-title">' + escapeHtml(cluster.name) + '</h3>' +
+              '<div class="major-tags">' + tagsHtml + '</div>' +
+              '<div class="cluster-note"><strong>数理化经选科提示：</strong>' + escapeHtml(cluster.note) + '</div>' +
+            '</div>'
+          );
+        }
+
+        const maxAff = Math.max(1, report.rankedClusters[0].affinity);
+        const allClustersHtml = report.rankedClusters.map(function (c, i) {
+          const relPct = Math.max(10, Math.min(99, Math.round((c.affinity / maxAff) * 96)));
+          return (
+            '<div class="mini-cluster-row">' +
+              '<span>' + (i + 1) + '. ' + escapeHtml(c.name) + '</span>' +
+              '<strong style="color:' + (i < 2 ? '#1B365D' : '#718096') + ';">相对匹配指数 ' + relPct + '</strong>' +
+            '</div>'
+          );
+        }).join('');
+
+        const alertsHtml = report.alerts.length > 0
+          ? report.alerts.map(function (a) {
+              return (
+                '<section class="alert-card">' +
+                  '<h3 class="alert-title">✦ ' + escapeHtml(a.title) + '</h3>' +
+                  '<p class="alert-body">' + escapeHtml(a.body) + '</p>' +
+                '</section>'
+              );
+            }).join('')
+          : '';
+
+        mainStage.innerHTML =
+          '<div class="fade-enter">' +
+            // 报告抬头
+            '<section class="report-hero">' +
+              '<div class="report-kicker">实时探索评估报告 · 数理化经专属模型</div>' +
+              '<h1 class="report-title">' + displayName + '香港本科专业方向画像</h1>' +
+              '<div class="report-meta-chips">' +
+                '<span class="meta-chip">' + escapeHtml(state.studentGrade) + '</span>' +
+                '<span class="meta-chip">A-Level 数学 · 物理 · 化学 · 经济</span>' +
+                '<span class="meta-chip">' + escapeHtml(today) + '</span>' +
+              '</div>' +
+            '</section>' +
+
+            // 特殊画像诊断卡片（命中时展示）
+            alertsHtml +
+
+            // 重点探索专业族群 Top 2
+            '<section class="card">' +
+              '<div class="section-title-bar">' +
+                '<h2>香港本科专业族群匹配建议</h2>' +
+                '<span class="section-badge">综合三模块计算</span>' +
+              '</div>' +
+              renderClusterCard(top1, true) +
+              renderClusterCard(top2, false) +
+              '<div class="all-clusters-list">' +
+                '<div class="all-clusters-label">全部 6 大专业族群相对匹配排序</div>' +
+                allClustersHtml +
+              '</div>' +
+            '</section>' +
+
+            // 模块一：五维雷达图 + 水平进度条
+            '<section class="card">' +
+              '<div class="section-title-bar">' +
+                '<h2>模块一 · 学科思维五维雷达</h2>' +
+                '<span class="section-badge">满分 20 分/维</span>' +
+              '</div>' +
+              '<div class="svg-box">' + radarSvg + '</div>' +
+              '<div class="dim-list">' + dimBarsHtml + '</div>' +
+            '</section>' +
+
+            // 模块二：二维体感坐标图
+            '<section class="card">' +
+              '<div class="section-title-bar">' +
+                '<h2>模块二 · 真实体感二维坐标</h2>' +
+                '<span class="section-badge">校准防失真</span>' +
+              '</div>' +
+              '<div class="svg-box">' + quadSvg + '</div>' +
+              '<div class="axis-summary-grid">' +
+                '<div class="axis-pill-card">' +
+                  '<div class="axis-pill-label">纵轴 · 原理 vs. 应用</div>' +
+                  '<div class="axis-pill-val">' + escapeHtml(report.vLabel) + '</div>' +
+                  '<div class="axis-pill-sub">原理 A：' + report.countA_v + ' 题 ｜ 应用 B：' + report.countB_v + ' 题</div>' +
+                '</div>' +
+                '<div class="axis-pill-card">' +
+                  '<div class="axis-pill-label">横轴 · 系统 vs. 人际</div>' +
+                  '<div class="axis-pill-val">' + escapeHtml(report.hLabel) + '</div>' +
+                  '<div class="axis-pill-sub">系统 A：' + report.countA_h + ' 题 ｜ 市场 B：' + report.countB_h + ' 题</div>' +
+                '</div>' +
+              '</div>' +
+            '</section>' +
+
+            // 模块三：价值观 Top 3
+            '<section class="card">' +
+              '<div class="section-title-bar">' +
+                '<h2>模块三 · 核心驱动力 Top 3</h2>' +
+                '<span class="section-badge">长期价值观锚点</span>' +
+              '</div>' +
+              '<div class="top-values-list">' + valuesHtml + '</div>' +
+            '</section>' +
+
+            // 分享与导出操作区（打印时隐藏）
+            '<section class="card no-print">' +
+              '<div class="section-title-bar">' +
+                '<h2>保存与转发给家长 / 顾问</h2>' +
+              '</div>' +
+              '<div class="action-stack">' +
+                '<button type="button" id="btnCopyReport" class="btn-primary btn-gold">一键复制结果报告（适配微信粘贴）</button>' +
+                '<div class="action-row-2">' +
+                  '<button type="button" id="btnPrintReport" class="btn-secondary">打印 / 保存 PDF</button>' +
+                  '<button type="button" id="btnRestart" class="btn-secondary">重新测试</button>' +
+                '</div>' +
+              '</div>' +
+            '</section>' +
+
+            // 合规边界声明
+            '<footer class="compliance-footer">' +
+              '<strong>使用边界声明：</strong>本问卷为基于公开生涯心理学理论设计的结构化自我探索工具，用于辅助家庭将宽泛的选科能力收敛为 1–2 个专业族群，不构成标准化心理诊断，也不代表任何院校的录取偏好；具体专业的科目先修要求与招生口径，以院校及香港入境事务处等官方当期发布为准。' +
+            '</footer>' +
+          '</div>';
+
+        // 绑定报告操作事件
+        document.getElementById('btnCopyReport').addEventListener('click', function () {
+          const shareText = buildShareText(report);
+          copyTextToClipboard(shareText);
+        });
+
+        document.getElementById('btnPrintReport').addEventListener('click', function () {
+          try {
+            window.print();
+          } catch (err) {
+            showToast('当前浏览器不支持直接打印，请使用「一键复制结果报告」');
+          }
+        });
+
+        document.getElementById('btnRestart').addEventListener('click', function () {
+          document.getElementById('resetModal').classList.add('is-open');
+        });
+      }
+
+      /* ========================================================================
+         八、校验与导航路由控制
+         ======================================================================== */
+      function validateCurrentStep() {
+        const missingIds = [];
+
+        if (state.step >= 1 && state.step <= 4) {
+          const start = (state.step - 1) * 5;
+          const pageQs = MODULE1_QUESTIONS.slice(start, start + 5);
+          pageQs.forEach(function (q) {
+            if (!state.m1[q.id]) missingIds.push(q.id);
+          });
+        } else if (state.step === 5) {
+          MODULE2_QUESTIONS.forEach(function (q) {
+            if (!state.m2[q.id]) missingIds.push(q.id);
+          });
+        } else if (state.step === 6) {
+          if (state.m3.length < 3) {
+            showToast('请先选择并排序 3 项核心价值观');
+            return false;
+          }
+        }
+
+        if (missingIds.length > 0) {
+          missingIds.forEach(function (id) {
+            const card = document.getElementById('qcard-' + id);
+            if (card) {
+              card.classList.remove('is-missing');
+              // 强制重排以重新触发抖动动画
+              void card.offsetWidth;
+              card.classList.add('is-missing');
+            }
+          });
+          const firstCard = document.getElementById('qcard-' + missingIds[0]);
+          if (firstCard) {
+            firstCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          showToast('还有 ' + missingIds.length + ' 题未作答，已为你标亮定位');
+          return false;
+        }
+
+        return true;
+      }
+
+      function goToStep(nextStep) {
+        state.step = nextStep;
+        saveState();
+        renderCurrentScreen();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function renderCurrentScreen() {
+        updateNavigationChrome();
+        if (state.step === 0) {
+          renderCover();
+        } else if (state.step >= 1 && state.step <= 4) {
+          renderModule1Page(state.step);
+        } else if (state.step === 5) {
+          renderModule2();
+        } else if (state.step === 6) {
+          renderModule3();
+        } else if (state.step === 7) {
+          renderReport();
+        }
+      }
+
+      // 绑定底部翻页按钮
+      btnPrev.addEventListener('click', function () {
+        if (state.step > 0) {
+          goToStep(state.step - 1);
+        }
+      });
+
+      btnNext.addEventListener('click', function () {
+        if (!validateCurrentStep()) return;
+        if (state.step < 7) {
+          goToStep(state.step + 1);
+        }
+      });
+
+      // 绑定重置弹窗事件
+      const resetModal = document.getElementById('resetModal');
+      document.getElementById('btnCancelReset').addEventListener('click', function () {
+        resetModal.classList.remove('is-open');
+      });
+
+      document.getElementById('btnConfirmReset').addEventListener('click', function () {
+        resetModal.classList.remove('is-open');
+        state = createInitialState();
+        saveState();
+        renderCurrentScreen();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        showToast('已清空记录，可重新开始测评');
+      });
+
+      resetModal.addEventListener('click', function (e) {
+        if (e.target === resetModal) {
+          resetModal.classList.remove('is-open');
+        }
+      });
+
+      // 初始启动：如果历史进度已停在结果页但数据不完整，安全回退到封面
+      const isReportComplete =
+        Object.keys(state.m1).length === 20 &&
+        Object.keys(state.m2).length === 8 &&
+        state.m3.length === 3;
+      if (state.step === 7 && !isReportComplete) {
+        state.step = 0;
+      }
+      renderCurrentScreen();
+    })();
+  </script>
+</body>
+</html>
